@@ -157,7 +157,7 @@ function createConfigTx () {
   echo "###############################################################"
   echo "####### Generate and submit config tx to add Org3 #############"
   echo "###############################################################"
-  docker exec cli scripts/step1org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
+  docker exec cli scripts/step1Gorg3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to create config tx"
     exit 1
@@ -180,9 +180,9 @@ function generateCerts (){
   echo "##### Generate Org3 certificates using cryptogen tool #########"
   echo "###############################################################"
 
-  (cd org3-artifacts
+  (cd org2-artifacts
    set -x
-   cryptogen generate --config=./org3-crypto.yaml
+   cryptogen generate --config=./org2-crypto.yaml
    res=$?
    set +x
    if [ $res -ne 0 ]; then
@@ -201,30 +201,35 @@ function generateChannelArtifacts() {
     exit 1
   fi
   echo "##########################################################"
-  echo "#########  Generating Org3 config material ###############"
+  echo "#########  Generating Org2 config material ###############"
   echo "##########################################################"
-  (cd org3-artifacts
+  (cd org2-artifacts
    export FABRIC_CFG_PATH=$PWD
    set -x
-   configtxgen -printOrg Org3MSP > ../channel-artifacts/org3.json
+   configtxgen -printOrg Org2MSP > ../channel-artifacts/org2.json
    res=$?
    set +x
    if [ $res -ne 0 ]; then
-     echo "Failed to generate Org3 config material..."
+     echo "Failed to generate Org2 config material..."
      exit 1
    fi
   )
-  cp -r /home/ubuntu/Build-Multi-Host-Network-Hyperledger/crypto-config/ordererOrganizations /home/ubuntu/Build-Multi-Host-Network-Hyperledger/org3-artifacts/crypto-config/
+
+  echo
+  echo "#################################################################"
+  echo "#######    Generating anchor peer update for Org2MSP   ##########"
+  echo "#################################################################"
+  configtxgen -profile NewOrg2Channel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
+  if [ "$?" -ne 0 ]; then
+    echo "Failed to generate anchor peer update for Org1MSP..."
+    exit 1
+  fi
+
+
+  cp -r /home/ubuntu/multi-host-multi-org-hlf/crypto-config/ordererOrganizations /home/ubuntu/multi-host-multi-org-hlf/org2-artifacts/crypto-config/
   echo
 }
 
-# If BYFN wasn't run abort
-if [ ! -d crypto-config ]; then
-  echo
-  echo "ERROR: Please, run byfn.sh first."
-  echo
-  exit 1
-fi
 
 # Obtain the OS and Architecture string that will be used to select the correct
 # native binaries for your platform
