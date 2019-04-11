@@ -80,7 +80,7 @@ Step 3. Generate crypto material and config transaction for Org1 - PC1
 
 ./org1Generate.sh
 
-Step 4: ## **** Copy crypto materials to PC2 - run this command from PC1
+Step 4: ## **** Copy crypto materials to PC2 - run this command from PC1 (please follow this blog to see how to do secure copy across ec2 instances :https://blog.e-zest.com/how-to-do-scp-from-one-ec2-instance-to-another-ec2-instance/)
 scp -r multi-host-multi-org-hlf/ ubuntu@<PC2 DNS>:/home/ubuntu
 
 Ste 5: Run all the containers for Org1 - peer0 from PC1
