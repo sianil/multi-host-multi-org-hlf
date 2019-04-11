@@ -1,8 +1,8 @@
 ## Build multi host multi vm fabric network
 
-##Pre-requisites :
+####Pre-requisites :
 
-1 ###### Install Go1.9 
+1 #### Install Go1.9 
 curl -O https://storage.googleapis.com/golang/go1.11.2.linux-amd64.tar.gz
 tar -xvf go1.11.2.linux-amd64.tar.gz
 sudo mv go /usr/local
@@ -10,14 +10,14 @@ sudo nano ~/.profile
 export GOPATH=$HOME/work
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-2. ##### Install npm 
+2. #### Install npm 
 ### Check if node is already installed by node -v command
 ### Follow below sequence to install NodeJs on Ubuntu 16.04( For other operating systems installations steps please follow Starter Kit ReadMe file)
 sudo apt install curl
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 sudo apt install nodejs
 
-3. ######## Upgrade npm if required by the following command:
+3. #### Upgrade npm if required by the following command:
 
 sudo npm install npm@5.6.0 -g
 
